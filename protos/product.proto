@@ -1,0 +1,41 @@
+syntax = "proto3";
+
+import "google/protobuf/timestamp.proto";
+
+package productsrv;
+option go_package = "github.com/quyenphamkhac/gmd-productsrv/protos/productsrvpb";
+
+service ProductSrv {
+  rpc GetAll (GetAllRequest) returns (GetAllReponse);
+  rpc GetById (GetByIdRequest) returns (GetByIdResponse);
+}
+
+message Product {
+  int32 id = 1;
+  string name = 2;
+  string description = 3;
+  string sku = 4;
+  google.protobuf.Timestamp created_at = 5;
+  google.protobuf.Timestamp updated_at = 6;
+}
+
+message GetAllRequest {
+  string query = 1;
+  int32 page_number = 2;
+  int32 result_per_page = 3;
+}
+
+message GetAllReponse {
+  repeated Product data = 1;
+  int32 total = 2;
+  int32 current_page = 3;
+  int32 result_per_page = 4;
+}
+
+message GetByIdRequest {
+  int32 id = 1;
+}
+
+message GetByIdResponse {
+  Product data = 1;
+}
