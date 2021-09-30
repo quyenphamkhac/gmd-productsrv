@@ -26,9 +26,9 @@ func main() {
 		log.Fatalf("Failed to listen: %v", err)
 	}
 
-	grpcServer.Serve(lis)
 	go func(serverPort string) {
 		log.Printf("Start grpc server port: %s\n", serverPort)
+		grpcServer.Serve(lis)
 	}(port)
 
 	quit := make(chan os.Signal, 1)
