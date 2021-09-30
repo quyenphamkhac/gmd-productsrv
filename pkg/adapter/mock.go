@@ -8,8 +8,8 @@ import (
 
 type mockAdapter struct{}
 
-func NewMockAdaper() (*mockAdapter, error) {
-	return &mockAdapter{}, nil
+func NewMockAdaper() *mockAdapter {
+	return &mockAdapter{}
 }
 
 func (m *mockAdapter) FindAll() ([]entity.Product, error) {

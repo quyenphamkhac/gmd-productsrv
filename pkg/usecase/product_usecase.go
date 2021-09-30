@@ -1,4 +1,4 @@
-package interactor
+package usecase
 
 import (
 	"github.com/quyenphamkhac/gmd-productsrv/pkg/entity"
@@ -7,23 +7,25 @@ import (
 
 type ProductUsecase interface {
 	FindAll() ([]entity.Product, error)
-	FindById() (*entity.Product, error)
+	FindById(id int) (*entity.Product, error)
 }
 
 type productUsecase struct {
-	repo *repo.ProductRepository
+	repo repo.ProductRepository
 }
 
-func NewProductUseCase(r *repo.ProductRepository) (*productUsecase, error) {
+func NewProductUseCase(r repo.ProductRepository) *productUsecase {
 	return &productUsecase{
 		repo: r,
-	}, nil
+	}
 }
 
 func (p *productUsecase) FindAll() ([]entity.Product, error) {
-	return []entity.Product{}, nil
+	products, errror := p.repo.FindAll()
+	return products, errror
 }
 
-func (p *productUsecase) FindById() (*entity.Product, error) {
-	return &entity.Product{}, nil
+func (p *productUsecase) FindById(id int) (*entity.Product, error) {
+	product, error := p.repo.FindById(id)
+	return product, error
 }
