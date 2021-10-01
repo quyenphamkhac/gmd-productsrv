@@ -6,6 +6,7 @@ import (
 	"os"
 	"os/signal"
 
+	"github.com/quyenphamkhac/gmd-productsrv/internal/driver"
 	"github.com/quyenphamkhac/gmd-productsrv/pkg/adapter"
 	pb "github.com/quyenphamkhac/gmd-productsrv/pkg/api/v1"
 	"github.com/quyenphamkhac/gmd-productsrv/pkg/handler"
@@ -14,6 +15,16 @@ import (
 )
 
 func main() {
+
+	rabbitmqConn := driver.NewRabbitMQConn()
+	defer rabbitmqConn.Close()
+
+	rabbitmqCh, err := rabbitmqConn.Channel()
+	if err != nil {
+		log.Fatal("Failed to create rabbitmq channel")
+	}
+	defer rabbitmqCh.Close()
+
 	grpcServer := grpc.NewServer()
 	mockAdapter := adapter.NewMockAdaper()
 	productUsecase := usecase.NewProductUseCase(mockAdapter)
