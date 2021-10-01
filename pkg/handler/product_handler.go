@@ -1,11 +1,11 @@
-package service
+package handler
 
 import (
 	"context"
 
+	pb "github.com/quyenphamkhac/gmd-productsrv/pkg/api/v1"
 	"github.com/quyenphamkhac/gmd-productsrv/pkg/entity"
 	"github.com/quyenphamkhac/gmd-productsrv/pkg/usecase"
-	pb "github.com/quyenphamkhac/gmd-productsrv/protos"
 	"google.golang.org/protobuf/types/known/timestamppb"
 )
 

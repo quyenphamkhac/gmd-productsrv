@@ -7,9 +7,9 @@ import (
 	"os/signal"
 
 	"github.com/quyenphamkhac/gmd-productsrv/pkg/adapter"
-	"github.com/quyenphamkhac/gmd-productsrv/pkg/service"
+	pb "github.com/quyenphamkhac/gmd-productsrv/pkg/api/v1"
+	"github.com/quyenphamkhac/gmd-productsrv/pkg/handler"
 	"github.com/quyenphamkhac/gmd-productsrv/pkg/usecase"
-	pb "github.com/quyenphamkhac/gmd-productsrv/protos"
 	"google.golang.org/grpc"
 )
 
@@ -17,8 +17,8 @@ func main() {
 	grpcServer := grpc.NewServer()
 	mockAdapter := adapter.NewMockAdaper()
 	productUsecase := usecase.NewProductUseCase(mockAdapter)
-	productSrv := service.NewProductService(productUsecase)
-	pb.RegisterProductSrvServer(grpcServer, productSrv)
+	productSrvHandler := handler.NewProductService(productUsecase)
+	pb.RegisterProductSrvServer(grpcServer, productSrvHandler)
 
 	port := os.Getenv("PORT")
 	lis, err := net.Listen("tcp", ":"+port)
