@@ -10,3 +10,6 @@ type Product struct {
 	CreatedAt   time.Time
 	UpdatedAt   time.Time
 }
+
+type ProductEvent struct {
+}
