@@ -6,7 +6,8 @@ import (
 	"os"
 	"os/signal"
 
-	"github.com/quyenphamkhac/gmd-productsrv/internal/driver"
+	"github.com/quyenphamkhac/gmd-productsrv/config"
+	"github.com/quyenphamkhac/gmd-productsrv/internal/rabbitmq"
 	"github.com/quyenphamkhac/gmd-productsrv/pkg/adapter"
 	pb "github.com/quyenphamkhac/gmd-productsrv/pkg/api/v1"
 	"github.com/quyenphamkhac/gmd-productsrv/pkg/handler"
@@ -16,12 +17,21 @@ import (
 
 func main() {
 
-	rabbitmqConn := driver.NewRabbitMQConn()
+	log.Println("starting service")
+
+	config, err := config.GetConfig()
+	if err != nil {
+		log.Fatalf("loading config: %v", err)
+	}
+	rabbitmqConn, err := rabbitmq.NewRabbitMQConn(config)
+	if err != nil {
+		log.Fatalf("connect rabbitmq: %v", err)
+	}
 	defer rabbitmqConn.Close()
 
 	rabbitmqCh, err := rabbitmqConn.Channel()
 	if err != nil {
-		log.Fatal("Failed to create rabbitmq channel")
+		log.Fatalf("create rabbitmq channel: %v", err)
 	}
 	defer rabbitmqCh.Close()
 
@@ -31,20 +41,20 @@ func main() {
 	productSrvHandler := handler.NewProductService(productUsecase)
 	pb.RegisterProductSrvServer(grpcServer, productSrvHandler)
 
-	port := os.Getenv("PORT")
+	port := config.Service.Port
 	lis, err := net.Listen("tcp", ":"+port)
 	if err != nil {
-		log.Fatalf("Failed to listen: %v", err)
+		log.Fatalf("failed to listen: %v", err)
 	}
 
-	go func(serverPort string) {
-		log.Printf("Start grpc server port: %s\n", serverPort)
+	go func() {
+		log.Printf("start grpc server port: %s\n", port)
 		grpcServer.Serve(lis)
-	}(port)
+	}()
 
 	quit := make(chan os.Signal, 1)
 	signal.Notify(quit, os.Interrupt)
 	<-quit
-	log.Println("Stopping grpc server...")
+	log.Println("stopping grpc server...")
 	grpcServer.GracefulStop()
 }

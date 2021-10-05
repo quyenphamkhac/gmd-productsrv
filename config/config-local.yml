@@ -1,0 +1,12 @@
+rabbitmq:
+  Host: localhost
+  Port: 5672
+  User: guest
+  Password: guest
+  Exchange: products-exchange
+  Queue: products-queue
+  RoutingKey: products-routing-key
+  ConsumerTag: products-consumer
+  WorkerPoolSize: 24
+service:
+  Port: 8080
