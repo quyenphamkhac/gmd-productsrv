@@ -7,6 +7,7 @@ import (
 	"os/signal"
 
 	"github.com/quyenphamkhac/gmd-productsrv/config"
+	"github.com/quyenphamkhac/gmd-productsrv/internal/logger"
 	"github.com/quyenphamkhac/gmd-productsrv/internal/rabbitmq"
 	"github.com/quyenphamkhac/gmd-productsrv/pkg/adapter"
 	pb "github.com/quyenphamkhac/gmd-productsrv/pkg/api/v1"
@@ -17,7 +18,7 @@ import (
 
 func main() {
 
-	log.Println("starting service")
+	log.Println("starting product service")
 
 	config, err := config.GetConfig()
 	if err != nil {
@@ -35,10 +36,16 @@ func main() {
 	}
 	defer rabbitmqCh.Close()
 
+	srvLogger, err := logger.NewServiceLogger(config)
+	srvLogger.InitLogger()
+	if err != nil {
+		log.Fatalf("unable init logger: %v", err)
+	}
+
 	grpcServer := grpc.NewServer()
 	mockAdapter := adapter.NewMockAdaper()
 	productUsecase := usecase.NewProductUseCase(mockAdapter)
-	productSrvHandler := handler.NewProductService(productUsecase)
+	productSrvHandler := handler.NewProductService(productUsecase, srvLogger)
 	pb.RegisterProductSrvServer(grpcServer, productSrvHandler)
 
 	port := config.Service.Port
