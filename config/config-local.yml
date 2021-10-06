@@ -10,3 +10,7 @@ rabbitmq:
   WorkerPoolSize: 24
 service:
   Port: 8080
+jeager:
+  Host: localhost:6831
+  ServiceName: product_service
+  LogSpans: false

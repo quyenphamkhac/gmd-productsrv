@@ -3,6 +3,7 @@ package handler
 import (
 	"context"
 
+	"github.com/opentracing/opentracing-go"
 	"github.com/quyenphamkhac/gmd-productsrv/internal/logger"
 	pb "github.com/quyenphamkhac/gmd-productsrv/pkg/api/v1"
 	"github.com/quyenphamkhac/gmd-productsrv/pkg/entity"
@@ -24,12 +25,15 @@ func NewProductService(u usecase.ProductUsecase, logger logger.Logger) *productS
 }
 
 func (s *productService) GetAll(ctx context.Context, req *pb.GetAllRequest) (*pb.GetAllReponse, error) {
+	span, ctx := opentracing.StartSpanFromContext(ctx, "ProductUsecase.FindAll")
+	defer span.Finish()
+
 	s.logger.Info("start find all api", logger.LogFields{
 		"request_id": "123",
 		"user_id":    "1234",
 		"user_ip":    "1234",
 	})
-	products, err := s.usecase.FindAll()
+	products, err := s.usecase.FindAll(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -48,12 +52,15 @@ func (s *productService) GetAll(ctx context.Context, req *pb.GetAllRequest) (*pb
 }
 
 func (s *productService) GetById(ctx context.Context, req *pb.GetByIdRequest) (*pb.GetByIdResponse, error) {
+	span, ctx := opentracing.StartSpanFromContext(ctx, "ProductUsecase.FindById")
+	defer span.Finish()
+
 	s.logger.Info("start find product by id api", logger.LogFields{
 		"request_id": "123",
 		"user_id":    "1234",
 		"user_ip":    "1234",
 	})
-	product, err := s.usecase.FindById(int(req.GetId()))
+	product, err := s.usecase.FindById(ctx, int(req.GetId()))
 	if err != nil {
 		return nil, err
 	}

@@ -1,10 +1,14 @@
 package repo
 
-import "github.com/quyenphamkhac/gmd-productsrv/pkg/entity"
+import (
+	"context"
+
+	"github.com/quyenphamkhac/gmd-productsrv/pkg/entity"
+)
 
 type ProductRepository interface {
-	FindAll() ([]entity.Product, error)
-	FindById(id int) (*entity.Product, error)
+	FindAll(ctx context.Context) ([]entity.Product, error)
+	FindById(ctx context.Context, id int) (*entity.Product, error)
 }
 
 type ProductPublisher interface {

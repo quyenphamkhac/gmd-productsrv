@@ -1,6 +1,7 @@
 package adapter
 
 import (
+	"context"
 	"time"
 
 	"github.com/quyenphamkhac/gmd-productsrv/pkg/entity"
@@ -12,7 +13,7 @@ func NewMockAdaper() *mockAdapter {
 	return &mockAdapter{}
 }
 
-func (m *mockAdapter) FindAll() ([]entity.Product, error) {
+func (m *mockAdapter) FindAll(ctx context.Context) ([]entity.Product, error) {
 	var products []entity.Product
 	products = append(products, entity.Product{
 		Id:          1,
@@ -31,7 +32,7 @@ func (m *mockAdapter) FindAll() ([]entity.Product, error) {
 	return products, nil
 }
 
-func (m *mockAdapter) FindById(id int) (*entity.Product, error) {
+func (m *mockAdapter) FindById(ctx context.Context, id int) (*entity.Product, error) {
 	return &entity.Product{
 		Id:          int32(id),
 		Name:        "Just a product",

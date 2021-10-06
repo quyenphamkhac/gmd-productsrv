@@ -11,6 +11,7 @@ import (
 type Config struct {
 	RabbitMQ RabbitMQ
 	Service  ServiceConfig
+	Jeager   JeagerConfig
 }
 
 type RabbitMQ struct {
@@ -27,6 +28,12 @@ type RabbitMQ struct {
 
 type ServiceConfig struct {
 	Port string
+}
+
+type JeagerConfig struct {
+	Host        string
+	ServiceName string
+	LogSpans    bool
 }
 
 func LoadConfig(path string) (*viper.Viper, error) {

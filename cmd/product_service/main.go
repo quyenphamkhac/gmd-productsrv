@@ -6,7 +6,9 @@ import (
 	"os"
 	"os/signal"
 
+	"github.com/opentracing/opentracing-go"
 	"github.com/quyenphamkhac/gmd-productsrv/config"
+	"github.com/quyenphamkhac/gmd-productsrv/internal/jaeger"
 	"github.com/quyenphamkhac/gmd-productsrv/internal/logger"
 	"github.com/quyenphamkhac/gmd-productsrv/internal/rabbitmq"
 	"github.com/quyenphamkhac/gmd-productsrv/pkg/adapter"
@@ -41,6 +43,16 @@ func main() {
 	if err != nil {
 		log.Fatalf("unable init logger: %v", err)
 	}
+
+	tracer, closer, err := jaeger.InitJeagerTracing(config)
+	if err != nil {
+		log.Fatalf("could not init jaeger tracer: %v", err)
+	}
+	log.Println("jaeger conntected")
+
+	opentracing.SetGlobalTracer(tracer)
+	defer closer.Close()
+	log.Println("opentracing conntected")
 
 	grpcServer := grpc.NewServer()
 	mockAdapter := adapter.NewMockAdaper()
