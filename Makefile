@@ -1,4 +1,4 @@
-.PHONY: protos init_rabbitmq stop_rabbitmq start_rabbitmq docker_compose start_product_svc start_product_client
+.PHONY: protos init_rabbitmq stop_rabbitmq start_rabbitmq docker_compose start_product_svc start_product_client stop_docker_compose
 
 protos:
 	protoc --proto_path=api/v1 --go-grpc_out=pkg/api/v1 \
@@ -18,6 +18,9 @@ stop_rabbitmq:
 
 docker_compose:
 	docker-compose -f docker-compose.local.yml up -d
+
+stop_docker_compose:
+	docker-compose -f docker-compose.local.yml down
 
 start_product_svc:
 	go run cmd/product_service/main.go

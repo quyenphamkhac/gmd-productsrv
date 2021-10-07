@@ -5,6 +5,8 @@ go 1.16
 require (
 	github.com/HdrHistogram/hdrhistogram-go v1.1.2 // indirect
 	github.com/opentracing/opentracing-go v1.2.0
+	github.com/pkg/errors v0.9.1
+	github.com/prometheus/client_golang v1.11.0
 	github.com/sirupsen/logrus v1.8.1
 	github.com/spf13/viper v1.9.0
 	github.com/streadway/amqp v1.0.0

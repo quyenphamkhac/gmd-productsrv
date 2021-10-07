@@ -9,7 +9,8 @@ import (
 
 type Logger interface {
 	InitLogger()
-	Info(message string, fields LogFields)
+	Info(args ...interface{})
+	Infof(template string, args ...interface{})
 }
 
 type LogFields map[string]interface{}
@@ -32,10 +33,10 @@ func (l *serviceLogger) InitLogger() {
 	l.log.SetOutput(os.Stderr)
 }
 
-func (l *serviceLogger) Info(message string, fields LogFields) {
-	if fields != nil {
-		l.log.WithFields(logrus.Fields(fields)).Info(message)
-		return
-	}
-	l.log.Info(message)
+func (l *serviceLogger) Info(args ...interface{}) {
+	l.log.Info(args...)
+}
+
+func (l *serviceLogger) Infof(template string, args ...interface{}) {
+	l.log.Infof(template, args...)
 }

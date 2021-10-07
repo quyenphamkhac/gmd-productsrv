@@ -14,3 +14,6 @@ jeager:
   Host: localhost:6831
   ServiceName: product_service
   LogSpans: false
+metrics:
+  Url: 0.0.0.0:7070
+  ServiceName: product_service
