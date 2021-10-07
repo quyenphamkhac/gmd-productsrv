@@ -1,4 +1,4 @@
-version: '3.7'
+version: "3.7"
 services:
   rabbitmq:
     container_name: rabbitmq
@@ -8,7 +8,7 @@ services:
       - 15672:15672
     volumes:
       - rabbitmq_data:/var/lib/rabbitmq
-    networks: 
+    networks:
       - microservice_network
   jaeger:
     container_name: jaeger
@@ -26,7 +26,36 @@ services:
       - 9411:9411
     networks:
       - microservice_network
+  prometheus:
+    container_name: prometheus
+    image: prom/prometheus:v2.30.3
+    volumes:
+      - ./config/prometheus-local.yml:/etc/prometheus/prometheus.yml:Z
+    command:
+      - "--config.file=/etc/prometheus/prometheus.yml"
+      - "--storage.tsdb.path=/prometheus"
+      - "--storage.tsdb.retention=20d"
+      - "--web.console.libraries=/usr/share/prometheus/console_libraries"
+      - "--web.console.templates=/usr/share/prometheus/consoles"
+    ports:
+      - 9090:9090
+    networks:
+      - microservice_network
+  node_exporter:
+    container_name: node_exporter
+    image: prom/node-exporter:v1.2.2
+    ports:
+      - 9101:9100
+    networks:
+      - microservice_network
+  grafana:
+    container_name: grafana
+    image: grafana/grafana:8.1.7
+    ports:
+      - 3000:3000
+    networks:
+      - microservice_network
 volumes:
   rabbitmq_data:
-networks: 
+networks:
   microservice_network:

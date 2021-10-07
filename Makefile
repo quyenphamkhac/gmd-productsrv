@@ -1,4 +1,4 @@
-.PHONY: protos init_rabbitmq stop_rabbitmq start_rabbitmq
+.PHONY: protos init_rabbitmq stop_rabbitmq start_rabbitmq docker_compose
 
 protos:
 	protoc --proto_path=api/v1 --go-grpc_out=pkg/api/v1 \
@@ -15,3 +15,6 @@ start_rabbitmq:
 
 stop_rabbitmq:
 	docker stop rabbit-tank
+
+docker_compose:
+	docker-compose -f docker-compose.local.yml up -d
