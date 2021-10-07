@@ -2,7 +2,6 @@ package rabbitmq
 
 import (
 	"fmt"
-	"log"
 
 	"github.com/quyenphamkhac/gmd-productsrv/config"
 	"github.com/streadway/amqp"
@@ -16,11 +15,5 @@ func NewRabbitMQConn(cfg *config.Config) (*amqp.Connection, error) {
 		cfg.RabbitMQ.Host,
 		cfg.RabbitMQ.Port,
 	)
-	log.Println("rabbitmq connection string: ", connStr)
-	conn, err := amqp.Dial(connStr)
-	if err != nil {
-		log.Printf("unable connect rabbit mq, %v", err)
-		return nil, err
-	}
-	return conn, nil
+	return amqp.Dial(connStr)
 }

@@ -12,6 +12,7 @@ type Logger interface {
 	Info(args ...interface{})
 	Infof(template string, args ...interface{})
 	Fatalf(template string, args ...interface{})
+	Errorf(template string, args ...interface{})
 }
 
 type LogFields map[string]interface{}
@@ -44,4 +45,8 @@ func (l *serviceLogger) Infof(template string, args ...interface{}) {
 
 func (l *serviceLogger) Fatalf(template string, args ...interface{}) {
 	l.log.Fatalf(template, args...)
+}
+
+func (l *serviceLogger) Errorf(template string, args ...interface{}) {
+	l.log.Errorf(template, args...)
 }

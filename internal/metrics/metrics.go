@@ -9,7 +9,7 @@ import (
 )
 
 type Metrics interface {
-	IncHit(status int, method, path string)
+	IncHits(status int, method, path string)
 	ObserveResponseTime(status int, method, path string, observeTime float64)
 }
 
@@ -51,7 +51,7 @@ func NewPrometheusMetrics(address string, name string) (*prometheusMetrics, erro
 	return &metric, nil
 }
 
-func (m *prometheusMetrics) IncHit(status int, method, path string) {
+func (m *prometheusMetrics) IncHits(status int, method, path string) {
 	m.HitsTotal.Inc()
 	m.Hits.WithLabelValues(strconv.Itoa(status), method, path).Inc()
 }

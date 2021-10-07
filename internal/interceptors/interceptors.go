@@ -2,6 +2,7 @@ package interceptors
 
 import (
 	"context"
+	"net/http"
 	"time"
 
 	"github.com/quyenphamkhac/gmd-productsrv/config"
@@ -30,5 +31,15 @@ func (im *InterceptorManager) Logger(ctx context.Context, req interface{}, info 
 	md, _ := metadata.FromIncomingContext(ctx)
 	resp, err = handler(ctx, req)
 	im.logger.Infof("Method: %s, Time: %v, Metadata: %v, Err: %v", info.FullMethod, time.Since(start), md, err)
+	return resp, err
+}
+
+func (im *InterceptorManager) Metrics(ctx context.Context, req interface{}, info *grpc.UnaryServerInfo, handler grpc.UnaryHandler) (interface{}, error) {
+	start := time.Now()
+	resp, err := handler(ctx, req)
+	var status = http.StatusOK
+	im.metr.ObserveResponseTime(status, info.FullMethod, info.FullMethod, time.Since(start).Seconds())
+	im.metr.IncHits(status, info.FullMethod, info.FullMethod)
+
 	return resp, err
 }

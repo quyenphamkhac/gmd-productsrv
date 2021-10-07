@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"log"
 	"net"
 	"os"
@@ -11,7 +12,9 @@ import (
 	grpcrecovery "github.com/grpc-ecosystem/go-grpc-middleware/recovery"
 	grpc_ctxtags "github.com/grpc-ecosystem/go-grpc-middleware/tags"
 	grpc_prometheus "github.com/grpc-ecosystem/go-grpc-prometheus"
+	"github.com/labstack/echo/v4"
 	"github.com/opentracing/opentracing-go"
+	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"github.com/quyenphamkhac/gmd-productsrv/config"
 	"github.com/quyenphamkhac/gmd-productsrv/internal/interceptors"
 	"github.com/quyenphamkhac/gmd-productsrv/internal/jaeger"
@@ -27,9 +30,6 @@ import (
 )
 
 func main() {
-
-	log.Println("starting product service")
-
 	cfg, err := config.GetConfig()
 	if err != nil {
 		log.Fatalf("loading config: %v", err)
@@ -71,6 +71,18 @@ func main() {
 
 	im := interceptors.NewInterceptorManager(svcLogger, cfg, metr)
 
+	ctx, cancel := context.WithCancel(context.Background())
+
+	router := echo.New()
+	router.GET("/metrics", echo.WrapHandler(promhttp.Handler()))
+
+	go func() {
+		if err := router.Start(cfg.Metrics.Url); err != nil {
+			svcLogger.Errorf("router.Start metrics: %v", err)
+			cancel()
+		}
+	}()
+
 	grpcServer := grpc.NewServer(grpc.KeepaliveParams(keepalive.ServerParameters{
 		MaxConnectionIdle: cfg.Service.MaxConnectionIdle * time.Minute,
 		Timeout:           cfg.Service.Timeout * time.Second,
@@ -105,7 +117,16 @@ func main() {
 
 	quit := make(chan os.Signal, 1)
 	signal.Notify(quit, os.Interrupt, syscall.SIGTERM)
-	<-quit
+	select {
+	case v := <-quit:
+		svcLogger.Errorf("signal.Notify: %v", v)
+	case done := <-ctx.Done():
+		svcLogger.Errorf("ctx.Done: %v", done)
+	}
+
+	if err := router.Shutdown(ctx); err != nil {
+		svcLogger.Errorf("Metrics router.Shutdown: %v", err)
+	}
 	grpcServer.GracefulStop()
 	svcLogger.Info("product service exited properly")
 }
