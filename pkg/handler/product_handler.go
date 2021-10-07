@@ -55,11 +55,7 @@ func (s *productService) GetById(ctx context.Context, req *pb.GetByIdRequest) (*
 	span, ctx := opentracing.StartSpanFromContext(ctx, "ProductUsecase.FindById")
 	defer span.Finish()
 
-	s.logger.Info("start find product by id api", logger.LogFields{
-		"request_id": "123",
-		"user_id":    "1234",
-		"user_ip":    "1234",
-	})
+	s.logger.Info("start find product by id api")
 	product, err := s.usecase.FindById(ctx, int(req.GetId()))
 	if err != nil {
 		return nil, err
@@ -67,12 +63,7 @@ func (s *productService) GetById(ctx context.Context, req *pb.GetByIdRequest) (*
 	res := &pb.GetByIdResponse{
 		Data: marshalItem(product),
 	}
-	s.logger.Info("log product data", logger.LogFields{
-		"request_id":   "123",
-		"user_id":      "1234",
-		"user_ip":      "1234",
-		"product_data": product,
-	})
+	s.logger.Info("log product data")
 	return res, nil
 }
 

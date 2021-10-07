@@ -9,7 +9,22 @@ rabbitmq:
   ConsumerTag: products-consumer
   WorkerPoolSize: 24
 service:
+  AppVersion: 1.0.0
   Port: 8080
+  PprofPort: :5555
+  Mode: Development
+  JwtSecretKey: secretkey
+  CookieName: jwt-token
+  ReadTimeout: 5
+  WriteTimeout: 5
+  SSL: true
+  CtxDefaultTimeout: 12
+  CSRF: true
+  Debug: false
+  MaxConnectionIdle: 5
+  Timeout: 15
+  MaxConnectionAge: 5
+  Time: 120
 jeager:
   Host: localhost:6831
   ServiceName: product_service

@@ -4,6 +4,7 @@ import (
 	"errors"
 	"log"
 	"os"
+	"time"
 
 	"github.com/spf13/viper"
 )
@@ -12,6 +13,7 @@ type Config struct {
 	RabbitMQ RabbitMQ
 	Service  ServiceConfig
 	Jeager   JeagerConfig
+	Metrics  MetricsConfig
 }
 
 type RabbitMQ struct {
@@ -27,13 +29,33 @@ type RabbitMQ struct {
 }
 
 type ServiceConfig struct {
-	Port string
+	AppVersion        string
+	Port              string
+	PprofPort         string
+	Mode              string
+	JwtSecretKey      string
+	CookieName        string
+	ReadTimeout       time.Duration
+	WriteTimeout      time.Duration
+	SSL               bool
+	CtxDefaultTimeout time.Duration
+	CSRF              bool
+	Debug             bool
+	MaxConnectionIdle time.Duration
+	Timeout           time.Duration
+	MaxConnectionAge  time.Duration
+	Time              time.Duration
 }
 
 type JeagerConfig struct {
 	Host        string
 	ServiceName string
 	LogSpans    bool
+}
+
+type MetricsConfig struct {
+	Url         string
+	ServiceName string
 }
 
 func LoadConfig(path string) (*viper.Viper, error) {
