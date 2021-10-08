@@ -13,16 +13,16 @@ import (
 	"github.com/uber/jaeger-lib/metrics"
 )
 
-func InitJeagerTracing(cfg *config.Config) (opentracing.Tracer, io.Closer, error) {
+func InitJaegerTracing(cfg *config.Config) (opentracing.Tracer, io.Closer, error) {
 	jaegerCfg := jaegercfg.Configuration{
-		ServiceName: cfg.Jeager.ServiceName,
+		ServiceName: cfg.Jaeger.ServiceName,
 		Sampler: &jaegercfg.SamplerConfig{
 			Type:  jaeger.SamplerTypeConst,
 			Param: 1,
 		},
 		Reporter: &jaegercfg.ReporterConfig{
-			LogSpans:           cfg.Jeager.LogSpans,
-			LocalAgentHostPort: cfg.Jeager.Host,
+			LogSpans:           cfg.Jaeger.LogSpans,
+			LocalAgentHostPort: cfg.Jaeger.Host,
 		},
 	}
 

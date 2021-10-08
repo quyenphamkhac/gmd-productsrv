@@ -1,4 +1,7 @@
-.PHONY: protos init_rabbitmq stop_rabbitmq start_rabbitmq docker_compose start_product_svc start_product_client stop_docker_compose
+.PHONY: protos init_rabbitmq stop_rabbitmq \
+	start_rabbitmq docker_compose start_product_svc \
+	start_product_client stop_docker_compose \
+	build_docker_image
 
 protos:
 	protoc --proto_path=api/v1 --go-grpc_out=pkg/api/v1 \
@@ -27,3 +30,6 @@ start_product_svc:
 
 start_product_client:
 	go run cmd/product_client/main.go
+
+build_docker_image:
+	docker build -t gmd-product-svc:v1.0.0 -f deployments/docker/Dockerfile . 

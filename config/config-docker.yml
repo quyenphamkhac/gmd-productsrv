@@ -1,5 +1,5 @@
 rabbitmq:
-  Host: localhost
+  Host: rabbitmq
   Port: 5672
   User: guest
   Password: guest
@@ -26,7 +26,7 @@ service:
   MaxConnectionAge: 5
   Time: 120
 jaeger:
-  Host: localhost:6831
+  Host: jaeger:6831
   ServiceName: product_service
   LogSpans: false
 metrics:

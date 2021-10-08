@@ -53,7 +53,7 @@ func main() {
 	}
 	defer rabbitmqCh.Close()
 
-	tracer, closer, err := jaeger.InitJeagerTracing(cfg)
+	tracer, closer, err := jaeger.InitJaegerTracing(cfg)
 	if err != nil {
 		svcLogger.Fatalf("could not init jaeger tracer: %v", err)
 	}

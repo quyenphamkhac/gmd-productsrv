@@ -12,7 +12,7 @@ import (
 type Config struct {
 	RabbitMQ RabbitMQ
 	Service  ServiceConfig
-	Jeager   JeagerConfig
+	Jaeger   JaegerConfig
 	Metrics  MetricsConfig
 }
 
@@ -47,7 +47,7 @@ type ServiceConfig struct {
 	Time              time.Duration
 }
 
-type JeagerConfig struct {
+type JaegerConfig struct {
 	Host        string
 	ServiceName string
 	LogSpans    bool
