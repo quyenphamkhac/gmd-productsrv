@@ -1,9 +1,6 @@
 FROM golang:1.16
 
-#ENV TZ=Europe/Moscow
-#RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
-
-ENV config=docker
+ENV build_env=docker
 
 WORKDIR /app
 
@@ -13,6 +10,6 @@ RUN go mod download
 
 RUN go get github.com/githubnemo/CompileDaemon
 
-EXPOSE 5000
+EXPOSE 8080
 
-ENTRYPOINT CompileDaemon --build="go build cmd/email_service/main.go" --command=./main
+ENTRYPOINT CompileDaemon --build="go build cmd/product_svc/main.go" --command=./main
