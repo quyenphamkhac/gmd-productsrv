@@ -11,6 +11,8 @@ RUN go build -o /product-svc cmd/product_svc/main.go
 
 FROM gcr.io/distroless/base-debian10
 
+ENV build_env=docker
+
 WORKDIR /
 
 COPY --from=build /product-svc /product-svc
