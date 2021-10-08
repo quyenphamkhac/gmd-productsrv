@@ -2,7 +2,7 @@ version: "3.7"
 services:
   product_svc:
     container_name: product_svc
-    image: gmd-product-svc:v1.0.0
+    image: khacquyen1996/product-svc:v1.0.0
     ports:
       - 8080:8080
       - 7070:7070
