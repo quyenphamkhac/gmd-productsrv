@@ -2,7 +2,6 @@ package config
 
 import (
 	"errors"
-	"fmt"
 	"log"
 	"os"
 	"time"
@@ -85,7 +84,6 @@ func ParseConfig(v *viper.Viper) (*Config, error) {
 
 func GetConfig() (*Config, error) {
 	configPath := GetConfigPath(os.Getenv("build_env"))
-	fmt.Println("config path: ", configPath)
 	v, err := LoadConfig(configPath)
 	if err != nil {
 		return nil, err

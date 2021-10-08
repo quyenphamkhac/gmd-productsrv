@@ -6,15 +6,16 @@ services:
     ports:
       - 8080:8080
       - 7070:7070
+    restart: always
     networks:
       - microservice_network
     environment:
       - build_env=docker
     depends_on:
-      - rabbitmq
       - prometheus
       - node_exporter
       - grafana
+      - rabbitmq
   rabbitmq:
     container_name: rabbitmq
     image: rabbitmq:3.9.7-management
@@ -45,7 +46,7 @@ services:
     container_name: prometheus
     image: prom/prometheus:v2.30.3
     volumes:
-      - ./config/prometheus-local.yml:/etc/prometheus/prometheus.yml:Z
+      - ./config/prometheus.yml:/etc/prometheus/prometheus.yml:Z
     command:
       - "--config.file=/etc/prometheus/prometheus.yml"
       - "--storage.tsdb.path=/prometheus"
