@@ -26,7 +26,7 @@ stop_docker_compose:
 	docker-compose -f docker-compose.local.yml down
 
 start_product_svc:
-	go run cmd/product_service/main.go
+	go run cmd/product_svc/main.go
 
 start_product_client:
 	go run cmd/product_client/main.go
