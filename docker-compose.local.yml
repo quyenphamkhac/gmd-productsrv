@@ -55,7 +55,34 @@ services:
       - 3000:3000
     networks:
       - microservice_network
+  postgres:
+    container_name: postgres12
+    image: postgres:12
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: product_svc_db
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - microservice_network
+  pgadmin:
+    container_name: pdadmin
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: pkquyen@sk-global.biz
+      PGADMIN_DEFAULT_PASSWORD: pkquyen
+    volumes:
+      - pgadmin_data:/root/.pgadmin
+    ports:
+      - 6969:80
+    networks:
+      - microservice_network
 volumes:
   rabbitmq_data:
+  postgres_data:
+  pgadmin_data:
 networks:
   microservice_network:
