@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"log"
 
 	"github.com/quyenphamkhac/gmd-productsrv/config"
@@ -10,6 +11,7 @@ import (
 )
 
 func main() {
+	fmt.Println("initializing product service")
 	cfg, err := config.GetConfig()
 	if err != nil {
 		log.Fatalf("loading config: %v", err)

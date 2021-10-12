@@ -2,6 +2,7 @@ package config
 
 import (
 	"errors"
+	"fmt"
 	"log"
 	"os"
 	"time"
@@ -62,7 +63,11 @@ func LoadConfig(path string) (*viper.Viper, error) {
 	v := viper.New()
 	v.SetConfigName(path)
 	v.AddConfigPath(".")
+	v.BindEnv("rabbitmq.host", "AMQP_HOST")
+	v.BindEnv("rabbitmq.user", "AMQP_USER")
+	v.BindEnv("rabbitmq.password", "AMQP_PWD")
 	v.AutomaticEnv()
+	fmt.Println(os.Getenv("AMQP_HOST"))
 	if err := v.ReadInConfig(); err != nil {
 		if _, ok := err.(viper.ConfigFileNotFoundError); ok {
 			return nil, errors.New("config file not found")
