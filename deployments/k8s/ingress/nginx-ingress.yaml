@@ -6,13 +6,13 @@ metadata:
     name: nginx-ingress
 spec:
   rules:
-  - host: rabbitmq-dashboard.io
+  - host: pkquyen-micro.io
     http:
       paths:
       - pathType: Prefix
         path: "/"
         backend:
           service:
-            name: rabbitmq-svc
+            name: prometheus-svc
             port: 
-              number: 15672
+              number: 9090
