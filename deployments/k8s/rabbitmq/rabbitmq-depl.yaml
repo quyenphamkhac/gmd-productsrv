@@ -13,13 +13,20 @@ spec:
       labels:
         app: rabbitmq
     spec:
+      volumes:
+      - name: rabbitmq-data
+        persistentVolumeClaim:
+          claimName: rabbitmq-pvc
       containers:
       - name: rabbitmq
         image: rabbitmq:3.9.7-management
         resources:
           limits:
-            memory: "128Mi"
+            memory: "512Mi"
             cpu: "500m"
+        volumeMounts:
+          - mountPath: /var/lib/rabbitmq/mnesia
+            name: rabbitmq-data
         ports:
         - containerPort: 5672
         - containerPort: 15672
